@@ -1,13 +1,17 @@
 import '@babel/polyfill';
 import express from 'express';
 import dotenv from 'dotenv';
+import router from './app/routes/index';
+import connection from './app/connection';
 
 dotenv.config();
 
 const app = express();
 const { PORT } = process.env;
+const database_ip = process.env.IP;
 
 app.use(express.json());
+app.use(router);
 
 //Home route
 app.get('/', (req, res) => {
@@ -30,7 +34,8 @@ app.use((req, res) => res.status(500).send({
 }));
 
 app.listen(PORT, 
-    console.log(`server is listening on ${PORT}`)
+    console.log(`server is listening on port ${PORT}`),
+    database_ip
     ); 
 
 export default app;
