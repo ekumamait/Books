@@ -31,3 +31,14 @@ export const Authenticate = (req, res, next) => {
         return next();
     });
 }
+
+export const verifyAdmin = async (req, res, next) => {
+    const user = req.decoded;
+    if (user.role != 'admin'){
+      return res.status(401).send({
+          success: 401, 
+          Message: 'User not Authorized'
+        })
+    }
+    next();
+} 

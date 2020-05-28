@@ -27,10 +27,14 @@ const userSchema = new Schema({
         }
       },
       password: {
+        type: String
+      },
+      role: {
         type: String,
+        default: 'user',
         lowercase: true,
         trim: true
-      },
+      }
 });
 
 const User = mongoose.model('user', userSchema);
