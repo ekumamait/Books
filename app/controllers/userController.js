@@ -56,14 +56,15 @@ class AuthController {
             }
           );
       }
-      if(!bcrypt.compare(req.body.password, user.password)) {
-          return res.status(400).send(
+      if(! await bcrypt.compare(req.body.password, user.password)) {
+          return res.status(401).send(
             { 
-              status: 400,
-              message: 'The password is invalid' 
+              status: 401,
+              message: 'The password is incorrect' 
             }
           );
       }
+      req.body.role = user.role;
       const token = await createToken(req.body);
       res.send(
         { 

@@ -1,6 +1,6 @@
 import BookModel from '../models/bookModel';
 import connection from '../connection';
-import User from '../models/userModel';
+import cloudinary from '../cloudinary';
 
 class BookController {  
   /**
@@ -11,16 +11,17 @@ class BookController {
    */
   static async addBook(req, res) {
     try {
-      var book = await BookModel.findOne({ title: req.body.title }).exec();
+      const book = await BookModel.findOne({ title: req.body.title }).exec();
       if(book) {
           return res.status(409).send(
             { 
               status: 409,
               message: 'Book with that Title already added',
-              error 
             }
           );
       }
+      const getImage = async (path) => await cloudinary.upload(req.files.image, 'Assets');
+      // console.log(getImage(req));
       const data = new BookModel(req.body);
       await data.save();
       return res.status(201).send({
@@ -29,12 +30,12 @@ class BookController {
         data
     });
     } catch(error) {
-      return res.status(400).send(
-        {
-          status: 400,
-          message: 'Oops failed to add a book',
-          error
-      });
+        return res.status(400).send(
+          {
+            status: 400,
+            message: 'Oops failed to add a book',
+            error
+        });
     }
   }
 
@@ -72,6 +73,14 @@ class BookController {
   static async getOneBook(req, res) {
     const data = await BookModel.findById(req.params.id)
     try {     
+      if(data == null) {
+        return res.status(200).send(
+          { 
+            status: 200,
+            message: 'Book with this Title doesn\'t exist',
+          }
+        );
+    }
       return res.status(200).send(
         { 
           status: 200,
@@ -123,8 +132,16 @@ class BookController {
    * @returns {void} return status code 200 and message 
    */
   static async deleteBook(req, res) {
-    try {
+    try {      
       const book = await BookModel.findById(req.params.id)
+      if(book == null) {
+        return res.status(200).send(
+          { 
+            status: 200,
+            message: 'Book with this Title doesn\'t exist',
+          }
+        );
+    }
       await BookModel.deleteOne(book)
       return res.status(200).send({ 
         status: 200,

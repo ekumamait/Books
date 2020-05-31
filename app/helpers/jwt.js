@@ -13,10 +13,7 @@ dotenv.config();
 
 async function createToken(data) {
     const token = await jwt.sign({
-        id: data._id,
-        password: data.password,
-        email: data.email,
-        firstname: data.firstname
+        ...data
     }, process.env.JWT_SECRET, {
             expiresIn: 60 * 60 // expires in 1 hour
         });

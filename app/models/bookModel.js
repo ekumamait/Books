@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
 
 const Schema = mongoose.Schema;
 
@@ -7,6 +6,7 @@ const bookSchema = new Schema({
       title:{
         type: String,
         required: true,
+        unique: true,
         trim: true,
         lowercase: true
       },
@@ -17,7 +17,7 @@ const bookSchema = new Schema({
         lowercase: true
       },
       image:{
-        type: String,
+        type: Buffer,
       }
 });
 
