@@ -4,13 +4,19 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import router from './app/routes/routes';
 import connection from './app/connection';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const { PORT } = process.env;
 const database_ip = process.env.IP;
+const corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
 
+app.use(cors(corsOptions))
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);

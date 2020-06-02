@@ -17,7 +17,7 @@ const bookSchema = new Schema({
         lowercase: true
       },
       image:{
-        type: Buffer,
+        type: String,
       }
 });
 
