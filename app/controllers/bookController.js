@@ -20,8 +20,8 @@ class BookController {
             }
           );
       }
-      const getImage = async (path) => await cloudinary.upload(req.files.image, 'Assets');
-      // console.log(getImage(req));
+      const getImage = await cloudinary.uploads(req.body.image, 'Assets');
+      req.body.image = getImage.url;
       const data = new BookModel(req.body);
       await data.save();
       return res.status(201).send({
